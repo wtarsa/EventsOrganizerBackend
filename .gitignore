@@ -1,0 +1,12 @@
+*.log
+.idea
+eventsOrganizer.iml
+web.iml
+desktop.iml
+common.iml
+target
+web/target
+common/target
+desktop/target
+META-INF
+
