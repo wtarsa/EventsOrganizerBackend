@@ -1,4 +1,4 @@
-package pl.edu.agh.io.eventsOrganizer.web;
+package pl.edu.agh.io.eventsOrganizer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
