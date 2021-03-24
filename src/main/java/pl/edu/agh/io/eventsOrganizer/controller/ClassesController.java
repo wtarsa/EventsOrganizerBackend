@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.List;
+
 @RestController
 @RequestMapping("/classes")
 public class ClassesController {
@@ -22,9 +26,18 @@ public class ClassesController {
         return repository.findById(id).get();
     }
 
+    @GetMapping("/all")
+    public List<Classes> allClasses() {
+        return repository.findAll();
+    }
+
     @GetMapping("/bulkcreate")
     public String bulkcreate() {
-        repository.save(new Classes("io", "1.38"));
+        repository.save(new Classes("io", "1.38",
+                        LocalDateTime.of(2021, Month.MARCH, 24, 12, 0),
+                        LocalDateTime.of(2021, Month.MARCH, 24, 14, 0).plusHours(2)
+                )
+        );
         return "Classes has been added to database.";
     }
 }
