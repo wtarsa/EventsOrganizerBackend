@@ -1,4 +1,4 @@
-# Events Organizer - Frontend Part
+# Events Organizer - Backend Part
 
 ---
 
