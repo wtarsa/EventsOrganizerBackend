@@ -40,7 +40,7 @@ public class InstructorController {
     }
 
     @CrossOrigin
-    @GetMapping("")
+    @GetMapping("/where")
     public List<Instructor> searchInstructorBy(
             @RequestParam(value = "firstName", required = false) Optional<String> firstName,
             @RequestParam(value = "lastName", required = false) Optional<String> lastName,
@@ -53,6 +53,10 @@ public class InstructorController {
             } else throw new IllegalArgumentException("Id is incorrect");
         } else if (firstName.isPresent() && lastName.isPresent()) {
             return instructorRepository.findInstructorByFirstAndLastName(firstName.get(), lastName.get());
+        } else if (firstName.isPresent()) {
+            return instructorRepository.findInstructorByFirstName(firstName.get());
+        } else if (lastName.isPresent()) {
+            return instructorRepository.findInstructorByLastName(lastName.get());
         } else {
             throw new IllegalArgumentException("Invalid Arguments");
         }

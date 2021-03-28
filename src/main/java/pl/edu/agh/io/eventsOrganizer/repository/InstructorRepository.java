@@ -11,4 +11,10 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 
     @Query("select i from Instructor i where i.firstName = :firstName and i.lastName = :lastName")
     List<Instructor> findInstructorByFirstAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
+
+    @Query("select i from Instructor i where i.firstName = :firstName")
+    List<Instructor> findInstructorByFirstName(@Param("firstName") String firstName);
+
+    @Query("select i from Instructor i where i.lastName = :lastName")
+    List<Instructor> findInstructorByLastName(@Param("lastName") String lastName);
 }
