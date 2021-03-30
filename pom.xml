@@ -56,12 +56,6 @@
 				<configuration>
 					<source>11</source>
 					<target>11</target>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>
