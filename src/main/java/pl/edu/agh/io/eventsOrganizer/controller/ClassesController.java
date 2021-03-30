@@ -28,8 +28,7 @@ public class ClassesController {
     @GetMapping("/{id}")
     public Classes searchClasses(@PathVariable Long id) {
         Optional<Classes> course = repository.findById(id);
-        if (course.isPresent()) return course.get();
-        else throw new IllegalArgumentException("Wrong Id provided");
+        return course.orElseGet(Classes::new);
     }
 
     @CrossOrigin

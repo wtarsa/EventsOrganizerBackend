@@ -22,8 +22,7 @@ public class InstructorController {
     @GetMapping("/{id}")
     public Person searchInstructor(@PathVariable long id) {
         Optional<Instructor> instructor = instructorRepository.findById(id);
-        if (instructor.isPresent()) return instructor.get();
-        else throw new IllegalArgumentException("Wrong Id provided");
+        return instructor.orElseGet(Instructor::new);
     }
 
     @CrossOrigin
@@ -48,9 +47,7 @@ public class InstructorController {
     ) {
         if (id.isPresent()) {
             Optional<Instructor> instructor = instructorRepository.findById(id.get());
-            if (instructor.isPresent()) {
-                return List.of(instructor.get());
-            } else throw new IllegalArgumentException("Id is incorrect");
+            return instructor.map(List::of).orElseGet(() -> List.of(new Instructor()));
         } else if (firstName.isPresent() && lastName.isPresent()) {
             return instructorRepository.findInstructorByFirstAndLastName(firstName.get(), lastName.get());
         } else if (firstName.isPresent()) {
@@ -58,7 +55,7 @@ public class InstructorController {
         } else if (lastName.isPresent()) {
             return instructorRepository.findInstructorByLastName(lastName.get());
         } else {
-            throw new IllegalArgumentException("Invalid Arguments");
+            return List.of(new Instructor());
         }
     }
 }
