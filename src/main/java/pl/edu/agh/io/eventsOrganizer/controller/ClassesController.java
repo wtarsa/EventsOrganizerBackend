@@ -2,10 +2,12 @@ package pl.edu.agh.io.eventsOrganizer.controller;
 
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
+import pl.edu.agh.io.eventsOrganizer.model.ClassesForm;
+import pl.edu.agh.io.eventsOrganizer.model.ClassesType;
+import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
+import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +16,12 @@ import java.util.Optional;
 public class ClassesController {
 
     private final ClassesRepository repository;
-    public ClassesController(ClassesRepository repository) {
+
+    private final InstructorRepository instructorRepository;
+
+    public ClassesController(ClassesRepository repository, InstructorRepository instructorRepository) {
         this.repository = repository;
+        this.instructorRepository = instructorRepository;
     }
 
     @CrossOrigin
@@ -35,11 +41,9 @@ public class ClassesController {
     @CrossOrigin
     @GetMapping("/bulkcreate")
     public String bulkCreate() {
-        repository.save(new Classes("io", "1.38",
-                        LocalDateTime.of(2021, Month.MARCH, 24, 12, 0),
-                        LocalDateTime.of(2021, Month.MARCH, 24, 14, 0).plusHours(2)
-                )
-        );
+        Instructor instructor = instructorRepository.findById(1L).get();
+        repository.save(new Classes(1, "2021-03-30 08.00", "2021-03-30 09.30", "IO",
+                "WSZYSCY", instructor, ClassesType.LECTURE, 2, ClassesForm.REMOTE, "1.38"));
         return "Classes has been added to database.";
     }
 }

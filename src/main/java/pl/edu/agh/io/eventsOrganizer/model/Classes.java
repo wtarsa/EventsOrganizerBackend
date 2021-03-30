@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "classes")
@@ -13,17 +14,19 @@ public class Classes {
     public Classes() {
     }
 
-    public Classes(String name, String classroom) {
-        this.name = name;
-        this.startTime = LocalDateTime.now(); // do zmiany koniecznie! ale teraz nie chce mi sie pisac parsera
-        this.endTime = LocalDateTime.now(); // do zmiany koniecznie! ale teraz nie chce mi sie pisac parsera
-        this.classroom = classroom;
-    }
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm");
 
-    public Classes(String name, String classroom, LocalDateTime startTime, LocalDateTime endTime) {
+    public Classes(int appointmentNumber, String startTime, String endTime, String name, String studentsGroup,
+                   Instructor instructor, ClassesType classesType, int numberOfHours, ClassesForm classesForm, String classroom) {
+        this.appointmentNumber = appointmentNumber;
+        this.startTime = LocalDateTime.parse(startTime, formatter);
+        this.endTime = LocalDateTime.parse(endTime, formatter);
         this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.studentsGroup = studentsGroup;
+        this.instructor = instructor;
+        this.classesType = classesType;
+        this.numberOfHours = numberOfHours;
+        this.classesForm = classesForm;
         this.classroom = classroom;
     }
 
@@ -31,11 +34,24 @@ public class Classes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String name;
+    private int appointmentNumber; //numer zjazdu
+
     private LocalDateTime startTime;
+
     private LocalDateTime endTime;
-    private String classroom;
+
+    private String name;
+
+    private String studentsGroup;
 
     @ManyToOne
     private Instructor instructor;
+
+    private ClassesType classesType;
+
+    private int numberOfHours;
+
+    private ClassesForm classesForm;
+
+    private String classroom;
 }
