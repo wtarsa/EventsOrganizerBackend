@@ -1,14 +1,15 @@
 package pl.edu.agh.io.eventsOrganizer.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.agh.io.eventsOrganizer.model.Classes;
+import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
 import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import pl.edu.agh.io.eventsOrganizer.model.Person;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/instructor")
@@ -22,9 +23,16 @@ public class InstructorController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public Person searchInstructor(@PathVariable long id) {
+    public ResponseEntity<Person> searchInstructor(@PathVariable long id) {
         Optional<Instructor> instructor = instructorRepository.findById(id);
-        return instructor.orElseGet(Instructor::new);
+        if (instructor.isPresent())
+            return new ResponseEntity<>(instructor.get(), HttpStatus.OK);
+        else
+            throw new NotFoundException(
+                    "Instructor with provided id not found",
+                    "/instructor/" + id,
+                    List.of("Instructor " + id + " not found")
+            );
     }
 
     @CrossOrigin

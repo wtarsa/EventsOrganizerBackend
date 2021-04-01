@@ -1,7 +1,9 @@
 package pl.edu.agh.io.eventsOrganizer.controller;
 
-import org.springframework.data.relational.core.sql.In;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesForm;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesType;
@@ -15,9 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/classes")
 public class ClassesController {
-
     private final ClassesRepository repository;
-
     private final InstructorRepository instructorRepository;
 
     public ClassesController(ClassesRepository repository, InstructorRepository instructorRepository) {
@@ -27,9 +27,16 @@ public class ClassesController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public Classes searchClasses(@PathVariable Long id) {
+    public ResponseEntity<Classes> searchClasses(@PathVariable Long id) {
         Optional<Classes> course = repository.findById(id);
-        return course.orElseGet(Classes::new);
+        if (course.isPresent())
+            return new ResponseEntity<>(course.get(), HttpStatus.OK);
+        else
+            throw new NotFoundException(
+                    "Class with provided id not found",
+                    "/classes/" + id,
+                    List.of("Class " + id + " not found")
+            );
     }
 
     @CrossOrigin

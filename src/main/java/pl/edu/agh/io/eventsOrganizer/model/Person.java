@@ -2,19 +2,14 @@ package pl.edu.agh.io.eventsOrganizer.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Entity
 @Data
 public class Person {
 
-    public Person(){
+    public Person() {
     }
 
     protected Person(String firstName, String lastName, String email) {
