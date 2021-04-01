@@ -39,6 +39,12 @@ public class InstructorController {
     }
 
     @CrossOrigin
+    @PostMapping
+    public Instructor addInstructor(@RequestBody Instructor newInstructor) {
+        return instructorRepository.save(newInstructor);
+    }
+
+    @CrossOrigin
     @GetMapping("/where")
     public List<Instructor> searchInstructorBy(
             @RequestParam(value = "firstName", required = false) Optional<String> firstName,

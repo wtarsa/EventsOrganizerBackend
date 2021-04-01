@@ -38,6 +38,42 @@ public class ClassesController {
     }
 
     @CrossOrigin
+    @PostMapping
+    public Classes addClasses(@RequestBody Classes newClasses) {
+        return repository.save(newClasses);
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/{id}")
+    public String deleteClasses(@PathVariable Long id) {
+        repository.deleteById(id);
+        return "Classes with id " + id + " has been deleted.";
+    }
+
+    @CrossOrigin
+    @PutMapping("/{id}")
+    public Classes updateClasses(@RequestBody Classes newClasses, @PathVariable Long id) {
+        return repository.findById(id)
+                .map(classes -> {
+                    classes.setAppointmentNumber(newClasses.getAppointmentNumber());
+                    classes.setStartTime(newClasses.getStartTime());
+                    classes.setEndTime(newClasses.getEndTime());
+                    classes.setName(newClasses.getName());
+                    classes.setStudentsGroup(newClasses.getStudentsGroup());
+                    classes.setInstructor(newClasses.getInstructor());
+                    classes.setClassesType(newClasses.getClassesType());
+                    classes.setNumberOfHours(newClasses.getNumberOfHours());
+                    classes.setClassesForm(newClasses.getClassesForm());
+                    classes.setClassroom(newClasses.getClassroom());
+                    return repository.save(classes);
+                })
+                .orElseGet(() -> {
+                    newClasses.setId(id);
+                    return repository.save(newClasses);
+                });
+    }
+
+    @CrossOrigin
     @GetMapping("/bulkcreate")
     public String bulkCreate() {
         Instructor instructor = instructorRepository.findById(1L).get();
