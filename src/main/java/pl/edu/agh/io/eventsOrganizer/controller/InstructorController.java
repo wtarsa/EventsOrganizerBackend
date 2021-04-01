@@ -1,6 +1,7 @@
 package pl.edu.agh.io.eventsOrganizer.controller;
 
 import org.springframework.web.bind.annotation.*;
+import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import pl.edu.agh.io.eventsOrganizer.model.Person;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
@@ -42,6 +43,29 @@ public class InstructorController {
     @PostMapping
     public Instructor addInstructor(@RequestBody Instructor newInstructor) {
         return instructorRepository.save(newInstructor);
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/{id}")
+    public String deleteInstructor(@PathVariable Long id) {
+        instructorRepository.deleteById(id);
+        return "Instructor with id " + id + " has been deleted.";
+    }
+
+    @CrossOrigin
+    @PutMapping("/{id}")
+    public Instructor updateInstructor(@RequestBody Instructor newInstructor, @PathVariable Long id) {
+        return instructorRepository.findById(id)
+                .map(instructor -> {
+                    instructor.setFirstName(newInstructor.getFirstName());
+                    instructor.setLastName(newInstructor.getLastName());
+                    instructor.setEmail(newInstructor.getEmail());
+                    return instructorRepository.save(instructor);
+                })
+                .orElseGet(() -> {
+                    newInstructor.setId(id);
+                    return instructorRepository.save(newInstructor);
+                });
     }
 
     @CrossOrigin
