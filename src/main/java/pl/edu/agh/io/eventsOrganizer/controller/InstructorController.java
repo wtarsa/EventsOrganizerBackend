@@ -8,6 +8,7 @@ import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/instructor")
@@ -60,6 +61,8 @@ public class InstructorController {
                     instructor.setFirstName(newInstructor.getFirstName());
                     instructor.setLastName(newInstructor.getLastName());
                     instructor.setEmail(newInstructor.getEmail());
+//                    instructor.setConductedClasses(newInstructor.getConductedClasses().stream().
+//                            map(c -> c.setInstructor(null)).collect(Collectors.toList()));
                     return instructorRepository.save(instructor);
                 })
                 .orElseGet(() -> {

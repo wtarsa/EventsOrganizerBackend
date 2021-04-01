@@ -19,6 +19,10 @@ public class Instructor extends Person{
         super(firstName, lastName, email);
     }
 
-    @OneToMany
-    private final List<Classes> conductedClasses = new LinkedList<>();
+//    @OneToMany
+//    private List<Classes> conductedClasses = new LinkedList<>();
+//
+//    public void addClasses(Classes classes) {
+//        conductedClasses.add(classes);
+//    }
 }

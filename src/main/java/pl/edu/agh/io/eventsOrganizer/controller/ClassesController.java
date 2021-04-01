@@ -1,5 +1,6 @@
 package pl.edu.agh.io.eventsOrganizer.controller;
 
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesForm;
@@ -41,6 +42,20 @@ public class ClassesController {
     @PostMapping
     public Classes addClasses(@RequestBody Classes newClasses) {
         return repository.save(newClasses);
+    }
+
+    @CrossOrigin
+    @PostMapping("/{id}/addInstructor")
+    public Classes addInstructor(@RequestBody Instructor instructor, @PathVariable Long id) {
+        Classes editedClasses = repository.findById(id).orElse(null);
+        if (editedClasses == null) {
+            // obsługa 400 do dodania
+            return null;
+        }
+//        instructor.addClasses(editedClasses);
+        editedClasses.setInstructor(instructor);
+        updateClasses(editedClasses, editedClasses.getId());
+        return editedClasses;
     }
 
     @CrossOrigin
