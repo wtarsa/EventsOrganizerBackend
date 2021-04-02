@@ -11,6 +11,7 @@ import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,38 +28,42 @@ public class ClassesController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<Classes> searchClasses(@PathVariable Long id) {
+    public ResponseEntity<Classes> searchClasses(@PathVariable Long id, HttpServletRequest request) {
         Optional<Classes> course = repository.findById(id);
         if (course.isPresent())
             return new ResponseEntity<>(course.get(), HttpStatus.OK);
         else
             throw new NotFoundException(
                     "Class with provided id not found",
-                    "/classes/" + id,
+                    request.getRequestURI(),
                     List.of("Class " + id + " not found")
             );
     }
 
     @CrossOrigin
     @GetMapping("/all")
-    public ResponseEntity<List<Classes>> allClasses() {
+    public ResponseEntity<List<Classes>> allClasses(HttpServletRequest request) {
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<Classes> addClasses(@RequestBody Classes newClasses) {
+    public ResponseEntity<Classes> addClasses(@RequestBody Classes newClasses, HttpServletRequest request) {
         return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping("/{id}/addInstructor")
-    public ResponseEntity<Classes> addInstructor(@RequestBody Instructor instructor, @PathVariable Long id) {
+    public ResponseEntity<Classes> addInstructor(
+            @RequestBody Instructor instructor,
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
         Classes editedClasses = repository.findById(id).orElse(null);
         if (editedClasses == null) {
             throw new NotFoundException(
                     "Classes with provided id: " + id + " not found.",
-                    "/classes/" + id + "/addInstructor",
+                    request.getRequestURI(),
                     List.of("Classes with provided id: " + id + " not found.")
             );
         }
@@ -70,7 +75,7 @@ public class ClassesController {
 
     @CrossOrigin
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClasses(@PathVariable Long id) {
+    public ResponseEntity<String> deleteClasses(@PathVariable Long id, HttpServletRequest request) {
         repository.deleteById(id);
         return new ResponseEntity<>("{\"Status\": \"Classes with id " + id + " has been deleted.\"}", HttpStatus.OK);
     }
@@ -100,12 +105,12 @@ public class ClassesController {
 
     @CrossOrigin
     @GetMapping("/bulkCreate")
-    public ResponseEntity<String> bulkCreate() {
+    public ResponseEntity<String> bulkCreate(HttpServletRequest request) {
         Instructor instructor = instructorRepository.findById(1L).orElse(null);
-        if(instructor == null){
+        if (instructor == null) {
             throw new NotFoundException(
                     "Instructor with provided id: 1 not found.",
-                    "/classes/bulkCreate",
+                    request.getRequestURI(),
                     List.of("Instructor with provided id: 1 not found.")
             );
         }

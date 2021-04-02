@@ -10,7 +10,7 @@ import java.util.List;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException extends RuntimeException {
     private final String path;
-    private List<String> details;
+    private final List<String> details;
 
     public NotFoundException(String exception, String path, List<String> details) {
         super(exception);
