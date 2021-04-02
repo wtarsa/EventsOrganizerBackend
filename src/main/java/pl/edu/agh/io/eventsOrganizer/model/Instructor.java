@@ -3,13 +3,10 @@ package pl.edu.agh.io.eventsOrganizer.model;
 import lombok.Data;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import java.util.LinkedList;
-import java.util.List;
 
 @Entity
 @Data
-public class Instructor extends Person{
+public class Instructor extends Person {
 
     public Instructor() {
         super();
