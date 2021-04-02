@@ -41,35 +41,38 @@ public class ClassesController {
 
     @CrossOrigin
     @GetMapping("/all")
-    public List<Classes> allClasses() {
-        return repository.findAll();
+    public ResponseEntity<List<Classes>> allClasses() {
+        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping
-    public Classes addClasses(@RequestBody Classes newClasses) {
-        return repository.save(newClasses);
+    public ResponseEntity<Classes> addClasses(@RequestBody Classes newClasses) {
+        return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping("/{id}/addInstructor")
-    public Classes addInstructor(@RequestBody Instructor instructor, @PathVariable Long id) {
+    public ResponseEntity<Classes> addInstructor(@RequestBody Instructor instructor, @PathVariable Long id) {
         Classes editedClasses = repository.findById(id).orElse(null);
         if (editedClasses == null) {
-            // obsługa 400 do dodania
-            return null;
+            throw new NotFoundException(
+                    "Classes with provided id: " + id + " not found.",
+                    "/classes/" + id + "/addInstructor",
+                    List.of("Classes with provided id: " + id + " not found.")
+            );
         }
 //        instructor.addClasses(editedClasses);
         editedClasses.setInstructor(instructor);
         updateClasses(editedClasses, editedClasses.getId());
-        return editedClasses;
+        return new ResponseEntity<>(editedClasses, HttpStatus.OK);
     }
 
     @CrossOrigin
     @DeleteMapping("/{id}")
-    public String deleteClasses(@PathVariable Long id) {
+    public ResponseEntity<String> deleteClasses(@PathVariable Long id) {
         repository.deleteById(id);
-        return "Classes with id " + id + " has been deleted.";
+        return new ResponseEntity<>("{\"Status\": \"Classes with id " + id + " has been deleted.\"}", HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -96,11 +99,18 @@ public class ClassesController {
     }
 
     @CrossOrigin
-    @GetMapping("/bulkcreate")
-    public String bulkCreate() {
-        Instructor instructor = instructorRepository.findById(1L).get();
+    @GetMapping("/bulkCreate")
+    public ResponseEntity<String> bulkCreate() {
+        Instructor instructor = instructorRepository.findById(1L).orElse(null);
+        if(instructor == null){
+            throw new NotFoundException(
+                    "Instructor with provided id: 1 not found.",
+                    "/classes/bulkCreate",
+                    List.of("Instructor with provided id: 1 not found.")
+            );
+        }
         repository.save(new Classes(1, "2021-03-30 08.00", "2021-03-30 09.30", "IO",
                 "WSZYSCY", instructor, ClassesType.LECTURE, 2, ClassesForm.REMOTE, "1.38"));
-        return "Classes has been added to database.";
+        return new ResponseEntity<>("{\"Status\": \"Classes has been added to database.\"}", HttpStatus.OK);
     }
 }
