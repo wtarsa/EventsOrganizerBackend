@@ -4,14 +4,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
+import pl.edu.agh.io.eventsOrganizer.model.Classes;
+import pl.edu.agh.io.eventsOrganizer.model.ClassesForm;
+import pl.edu.agh.io.eventsOrganizer.model.ClassesType;
+import pl.edu.agh.io.eventsOrganizer.model.Instructor;
+
 import pl.edu.agh.io.eventsOrganizer.forms.ClassesSubmitForm;
 import pl.edu.agh.io.eventsOrganizer.model.*;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/classes")
@@ -48,6 +56,7 @@ public class ClassesController {
     @PostMapping
     public ResponseEntity<Classes> addClasses(@RequestBody Classes newClasses, HttpServletRequest request) {
         return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
+
     }
 
     @CrossOrigin
@@ -139,5 +148,30 @@ public class ClassesController {
         repository.save(new Classes(1, "2021-03-30 08.00", "2021-03-30 09.30", "IO",
                 "WSZYSCY", instructor, ClassesType.LECTURE, 2, ClassesForm.REMOTE, "1.38"));
         return new ResponseEntity<>("{\"Status\": \"Classes has been added to database.\"}", HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("/where")
+    public ResponseEntity<List<Classes>> searchClassesBy(
+            @RequestParam(value = "firstName", required = false) Optional<String> firstName,
+            @RequestParam(value = "lastName", required = false) Optional<String> lastName,
+            @RequestParam(value = "startDate", required = false) Optional<LocalDateTime> startDate,
+            @RequestParam(value = "endDate", required = false) Optional<LocalDateTime> endDate,
+            @RequestParam(value = "classroom", required = false) Optional<String> classroom,
+            HttpServletRequest request
+    ) {
+        List<Classes> classes = repository.findAll();
+        if (firstName.isPresent())
+            classes = classes.stream().filter(a -> a.getInstructor().getFirstName().equals(firstName.get())).collect(Collectors.toList());
+        if (lastName.isPresent())
+            classes = classes.stream().filter(a -> a.getInstructor().getLastName().equals(lastName.get())).collect(Collectors.toList());
+        if(startDate.isPresent())
+            classes = classes.stream().filter(a -> a.getStartTime().isAfter(startDate.get())).collect(Collectors.toList());
+        if(endDate.isPresent())
+            classes = classes.stream().filter(a -> a.getEndTime().isBefore(endDate.get())).collect(Collectors.toList());
+        if(classroom.isPresent())
+            classes = classes.stream().filter(a -> a.getClassroom().equals(classroom.get())).collect(Collectors.toList());
+
+        return new ResponseEntity<>(classes, HttpStatus.OK);
     }
 }
