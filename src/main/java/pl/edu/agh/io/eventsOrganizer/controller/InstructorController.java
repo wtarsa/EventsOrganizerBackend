@@ -104,13 +104,14 @@ public class InstructorController {
                     List.of("Instructor with id: " + id + " not found"));
         } else if (firstName.isPresent() && lastName.isPresent()) {
             return new ResponseEntity<>(instructorRepository
-                    .findInstructorByFirstAndLastName(firstName.get(), lastName.get()), HttpStatus.OK);
+                    .findInstructorByFirstNameAndLastName(firstName.get(), lastName.get()), HttpStatus.OK);
         } else if (firstName.isPresent()) {
             return new ResponseEntity<>(instructorRepository
-                    .findInstructorByFirstName(firstName.get()), HttpStatus.OK);
+                    .findByFirstName(firstName.get()), HttpStatus.OK);
         } else if (lastName.isPresent()) {
             return new ResponseEntity<>(instructorRepository
-                    .findInstructorByLastName(lastName.get()), HttpStatus.OK);
+                    .findByLastName(lastName.get()), HttpStatus.OK);
+
         } else {
             throw new NotFoundException(
                     "The request has no arguments given",
