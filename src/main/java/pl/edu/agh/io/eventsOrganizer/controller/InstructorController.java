@@ -5,25 +5,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
 import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
+import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import pl.edu.agh.io.eventsOrganizer.model.Person;
+import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/instructor")
 public class InstructorController {
 
     private final InstructorRepository instructorRepository;
 
-    public InstructorController(InstructorRepository repository) {
-        this.instructorRepository = repository;
+    private final ClassesRepository classesRepository;
+
+    public InstructorController(InstructorRepository instructorRepository, ClassesRepository classesRepository) {
+        this.instructorRepository = instructorRepository;
+        this.classesRepository = classesRepository;
     }
 
-    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Person> searchInstructor(@PathVariable long id, HttpServletRequest request) {
         Optional<Instructor> instructor = instructorRepository.findById(id);
@@ -37,33 +42,28 @@ public class InstructorController {
             );
     }
 
-    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<Instructor>> searchAllInstructors(HttpServletRequest request) {
         return new ResponseEntity<>(instructorRepository.findAll(), HttpStatus.OK);
     }
 
-    @CrossOrigin
     @GetMapping("/bulkcreate")
     public ResponseEntity<String> bulkCreate(HttpServletRequest request) {
         instructorRepository.save(new Instructor("Adam", "Nowak", "anowak@student.agh.edu.pl"));
         return new ResponseEntity<>("{\"Status\": \"Instructor has been added to database.\"}", HttpStatus.OK);
     }
 
-    @CrossOrigin
     @PostMapping
     public ResponseEntity<Instructor> addInstructor(@RequestBody Instructor newInstructor, HttpServletRequest request) {
         return new ResponseEntity<>(instructorRepository.save(newInstructor), HttpStatus.OK);
     }
 
-    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteInstructor(@PathVariable Long id, HttpServletRequest request) {
         instructorRepository.deleteById(id);
         return new ResponseEntity<>("{\"Status\": \"Instructor with id " + id + " has been deleted.\"}", HttpStatus.OK);
     }
 
-    @CrossOrigin
     @PutMapping("/{id}")
     public ResponseEntity<Instructor> updateInstructor(
             @RequestBody Instructor newInstructor,
@@ -75,8 +75,6 @@ public class InstructorController {
                     instructor.setFirstName(newInstructor.getFirstName());
                     instructor.setLastName(newInstructor.getLastName());
                     instructor.setEmail(newInstructor.getEmail());
-//                    instructor.setConductedClasses(newInstructor.getConductedClasses().stream().
-//                            map(c -> c.setInstructor(null)).collect(Collectors.toList()));
                     return instructorRepository.save(instructor);
                 })
                 .orElseGet(() -> {
@@ -87,7 +85,6 @@ public class InstructorController {
         );
     }
 
-    @CrossOrigin
     @GetMapping("/where")
     public ResponseEntity<List<Instructor>> searchInstructorBy(
             @RequestParam(value = "firstName", required = false) Optional<String> firstName,
@@ -119,5 +116,10 @@ public class InstructorController {
                     List.of("The request has no arguments given")
             );
         }
+    }
+
+    @GetMapping("/{id}/classes")
+    public ResponseEntity<List<Classes>> findClassesConductedByInstructor(@PathVariable Long id) {
+        return new ResponseEntity<>(classesRepository.findClassesByInstructorId(id), HttpStatus.OK);
     }
 }
