@@ -4,19 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
+import pl.edu.agh.io.eventsOrganizer.forms.ClassesSubmitForm;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesForm;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesType;
 import pl.edu.agh.io.eventsOrganizer.model.Instructor;
-
-import pl.edu.agh.io.eventsOrganizer.forms.ClassesSubmitForm;
-import pl.edu.agh.io.eventsOrganizer.model.*;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,10 +63,10 @@ public class ClassesController {
             HttpServletRequest request
     ) {
         List<Instructor> instructors = instructorRepository
-                .findInstructorByFirstAndLastName(classesSubmitForm.getFirstName(), classesSubmitForm.getLastName());
+                .findInstructorByFirstNameAndLastName(classesSubmitForm.getFirstName(), classesSubmitForm.getLastName());
 
         Instructor savedInstructor;
-        if(instructors.size() == 0){ // Adding dummy instructor
+        if (instructors.size() == 0) { // Adding dummy instructor
             Instructor dummyInstructor
                     = new Instructor(classesSubmitForm.getFirstName(), classesSubmitForm.getLastName(), null);
             savedInstructor = instructorRepository.save(dummyInstructor);
@@ -165,11 +162,11 @@ public class ClassesController {
             classes = classes.stream().filter(a -> a.getInstructor().getFirstName().equals(firstName.get())).collect(Collectors.toList());
         if (lastName.isPresent())
             classes = classes.stream().filter(a -> a.getInstructor().getLastName().equals(lastName.get())).collect(Collectors.toList());
-        if(startDate.isPresent())
+        if (startDate.isPresent())
             classes = classes.stream().filter(a -> a.getStartTime().isAfter(startDate.get())).collect(Collectors.toList());
-        if(endDate.isPresent())
+        if (endDate.isPresent())
             classes = classes.stream().filter(a -> a.getEndTime().isBefore(endDate.get())).collect(Collectors.toList());
-        if(classroom.isPresent())
+        if (classroom.isPresent())
             classes = classes.stream().filter(a -> a.getClassroom().equals(classroom.get())).collect(Collectors.toList());
 
         return new ResponseEntity<>(classes, HttpStatus.OK);
