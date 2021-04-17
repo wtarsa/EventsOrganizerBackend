@@ -8,11 +8,15 @@ import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesForm;
 import pl.edu.agh.io.eventsOrganizer.model.ClassesType;
 import pl.edu.agh.io.eventsOrganizer.model.Instructor;
+
+import pl.edu.agh.io.eventsOrganizer.forms.ClassesSubmitForm;
+import pl.edu.agh.io.eventsOrganizer.model.*;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,6 +55,31 @@ public class ClassesController {
     @CrossOrigin
     @PostMapping
     public ResponseEntity<Classes> addClasses(@RequestBody Classes newClasses, HttpServletRequest request) {
+        return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
+
+    }
+
+    @CrossOrigin
+    @PostMapping("/submit")
+    public ResponseEntity<Classes> addClassesByForm(
+            @RequestBody ClassesSubmitForm classesSubmitForm,
+            HttpServletRequest request
+    ) {
+        List<Instructor> instructors = instructorRepository
+                .findInstructorByFirstAndLastName(classesSubmitForm.getFirstName(), classesSubmitForm.getLastName());
+
+        Instructor savedInstructor;
+        if(instructors.size() == 0){ // Adding dummy instructor
+            Instructor dummyInstructor
+                    = new Instructor(classesSubmitForm.getFirstName(), classesSubmitForm.getLastName(), null);
+            savedInstructor = instructorRepository.save(dummyInstructor);
+
+        } else { // Silent Assumption - unique firstName and lastName
+            savedInstructor = instructors.get(0);
+        }
+
+        Classes newClasses = classesSubmitForm.getClassesWithInstructor(savedInstructor);
+
         return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
     }
 

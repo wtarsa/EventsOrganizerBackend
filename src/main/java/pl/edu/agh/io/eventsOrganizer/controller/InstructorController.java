@@ -111,6 +111,7 @@ public class InstructorController {
         } else if (lastName.isPresent()) {
             return new ResponseEntity<>(instructorRepository
                     .findByLastName(lastName.get()), HttpStatus.OK);
+
         } else {
             throw new NotFoundException(
                     "The request has no arguments given",
