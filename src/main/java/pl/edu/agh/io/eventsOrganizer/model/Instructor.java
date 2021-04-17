@@ -15,11 +15,4 @@ public class Instructor extends Person {
     public Instructor(String firstName, String lastName, String email) {
         super(firstName, lastName, email);
     }
-
-//    @OneToMany
-//    private List<Classes> conductedClasses = new LinkedList<>();
-//
-//    public void addClasses(Classes classes) {
-//        conductedClasses.add(classes);
-//    }
 }

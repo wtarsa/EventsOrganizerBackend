@@ -13,6 +13,8 @@ public interface ClassesRepository extends JpaRepository<Classes, Long> {
 
     List<Classes> findClassesByInstructorLastName(@Param("firstName") String firstName);
 
+    List<Classes> findClassesByInstructorId(@Param("id") Long id);
+
     List<Classes> findClassesByClassroom(@Param("classroom") String classroom);
 
     List<Classes> findClassesByStartTimeAfter(@Param("startTime") LocalDateTime startTime);
