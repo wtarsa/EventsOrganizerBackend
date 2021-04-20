@@ -31,4 +31,18 @@ class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity(errorMessage, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(MailException.class)
+    public final ResponseEntity<Object> handleMailException(MailException ex) {
+        logger.error(ex.getLocalizedMessage());
+        ErrorMessage errorMessage = new ErrorMessage(
+                ex.getLocalizedMessage(),
+                ex.getDetails(),
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                ex.getPath()
+        );
+        return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
 }
