@@ -21,10 +21,9 @@ public class MailController {
     MailService mailService = new MailService();
 
     @PostMapping
-    public ResponseEntity<Mail> sendMail(@RequestBody Mail mail, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-        Message message = mailService.createMessage(mail);
+    public ResponseEntity<Mail> sendMail(@RequestBody Mail mail, HttpServletRequest request) throws UnsupportedEncodingException {
         try {
-            mailService.sendEmail(message);
+            mailService.sendEmail(mail);
             return new ResponseEntity<>(mail, HttpStatus.OK);
         } catch (MessagingException e) {
             throw new MailException(

@@ -7,8 +7,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class MailService {
-    final String username = "";
-    final String password = "";
+    final String user = "postmaster@sandbox349dce3";
+    final String name = "e7ab14b6ab5bb5e79385e83ea.mailgun.org";
+    final String username = user+name;
+
+    final String pass = "16bc7710124d6e3df5a6";
+    final String word = "61b6ca10a024-71b35d7e-f9882ae5";
+    final String password = pass + word;
+
     Properties prop = createProperties();
     Session session = Session.getInstance(prop,
             new javax.mail.Authenticator() {
@@ -17,11 +23,7 @@ public class MailService {
                 }
             });
 
-    public void sendEmail(Message message) throws MessagingException {
-        Transport.send(message);
-    }
-
-    public Message createMessage(Mail mail) throws UnsupportedEncodingException, MessagingException {
+    public void sendEmail(Mail mail) throws MessagingException, UnsupportedEncodingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress("agheventsorganizer@interia.pl", "AGH Events Organizer"));
         message.setSubject(mail.getSubject());
@@ -31,7 +33,7 @@ public class MailService {
                 InternetAddress.parse(mail.getRecipient())
         );
         message.setText(mail.getContent());
-        return message;
+        Transport.send(message);
     }
 
     Properties createProperties() {
