@@ -47,7 +47,7 @@ public class ClassesSubmitForm {
 
     private String classroom;
 
-    public Classes getClassesWithInstructor(Instructor instructor){
+    public Classes getClassesWithInstructor(Instructor instructor) {
         return new Classes(appointmentNumber, startTime, endTime, name, studentsGroup, instructor, classesType,
                 numberOfHours, classesForm, classroom);
     }
