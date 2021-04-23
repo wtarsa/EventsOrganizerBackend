@@ -9,7 +9,7 @@ import java.util.Properties;
 public class MailService {
     final String user = "postmaster@sandbox349dce3";
     final String name = "e7ab14b6ab5bb5e79385e83ea.mailgun.org";
-    final String username = user+name;
+    final String username = user + name;
 
     final String pass = "16bc7710124d6e3df5a6";
     final String word = "61b6ca10a024-71b35d7e-f9882ae5";

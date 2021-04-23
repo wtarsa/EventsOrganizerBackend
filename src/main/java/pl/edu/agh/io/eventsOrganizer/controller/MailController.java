@@ -7,7 +7,6 @@ import pl.edu.agh.io.eventsOrganizer.errors.MailException;
 import pl.edu.agh.io.eventsOrganizer.mail.Mail;
 import pl.edu.agh.io.eventsOrganizer.mail.MailService;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
