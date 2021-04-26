@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.edu.agh.io.eventsOrganizer.errors.ErrorInfo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,11 +19,10 @@ public class CustomErrorController implements ErrorController {
      * @return error
      */
     @RequestMapping("/error")
-    public ResponseEntity<String> handleError(HttpServletRequest request) {
+    public ResponseEntity<ErrorInfo> handleError(HttpServletRequest request) {
         return new ResponseEntity<>(
-                "{\"pathInfo\": \" " + request.getPathInfo() + "  \"," +
-                        "\"method\": \" " + request.getMethod() + "  \"," +
-                        "\"queryString\": \" " + request.getQueryString() + "  \"}",
+                new ErrorInfo(request.getPathInfo(), request.getMethod(), request.getQueryString(), request.getProtocol(),
+                        request.getContentLength(), request.getLocale(), request.getLocalPort(), request.getContentType()),
                 HttpStatus.NOT_FOUND);
     }
 
