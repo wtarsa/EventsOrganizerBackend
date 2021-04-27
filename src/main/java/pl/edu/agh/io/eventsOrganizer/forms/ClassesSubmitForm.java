@@ -11,7 +11,7 @@ public class ClassesSubmitForm {
 
     public ClassesSubmitForm(int appointmentNumber, String startTime, String endTime, String name, String studentsGroup,
                              String firstName, String lastName, ClassesType classesType, int numberOfHours,
-                             ClassesForm classesForm, String classroom) {
+                             ClassesForm classesForm, String classroom, String event) {
         this.appointmentNumber = appointmentNumber;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -23,6 +23,7 @@ public class ClassesSubmitForm {
         this.numberOfHours = numberOfHours;
         this.classesForm = classesForm;
         this.classroom = classroom;
+        this.event = event;
     }
 
     private int appointmentNumber; //numer zjazdu
@@ -47,9 +48,11 @@ public class ClassesSubmitForm {
 
     private String classroom;
 
+    private String event;
+
     public Classes getClassesWithInstructor(Instructor instructor) {
         return new Classes(appointmentNumber, startTime, endTime, name, studentsGroup, instructor, classesType,
-                numberOfHours, classesForm, classroom);
+                numberOfHours, classesForm, classroom, event);
     }
 
 }
