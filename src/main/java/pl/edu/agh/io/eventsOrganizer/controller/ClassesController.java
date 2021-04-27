@@ -166,7 +166,7 @@ public class ClassesController {
         if (endDate.isPresent())
             classes = classes.stream().filter(a -> a.getEndTime().isBefore(endDate.get())).collect(Collectors.toList());
         if (classroom.isPresent())
-            classes = classes.stream().filter(a -> a.getClassroom().equals(classroom.get())).collect(Collectors.toList());
+            classes = classes.stream().filter(a -> a.getClassroom()!=null && a.getClassroom().equals(classroom.get())).collect(Collectors.toList());
 
         return new ResponseEntity<>(classes, HttpStatus.OK);
     }
