@@ -6,6 +6,8 @@ import pl.edu.agh.io.eventsOrganizer.model.Classes;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface ClassesRepository extends JpaRepository<Classes, Long> {
 
@@ -20,4 +22,8 @@ public interface ClassesRepository extends JpaRepository<Classes, Long> {
     List<Classes> findClassesByStartTimeAfter(@Param("startTime") LocalDateTime startTime);
 
     List<Classes> findClassesByEndTimeBefore(@Param("endTime") LocalDateTime endTime);
+
+    Optional<Classes> findById(@Param("id") UUID id);
+
+
 }
