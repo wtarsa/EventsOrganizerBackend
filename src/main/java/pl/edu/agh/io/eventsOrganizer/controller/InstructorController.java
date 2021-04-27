@@ -12,8 +12,10 @@ import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/instructor")
@@ -128,5 +130,14 @@ public class InstructorController {
     @GetMapping("/{id}/classes")
     public ResponseEntity<List<Classes>> findClassesConductedByInstructor(@PathVariable Long id) {
         return new ResponseEntity<>(classesRepository.findClassesByInstructorId(id), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("/{id}/timetable")
+    public ResponseEntity<List<Classes>> findFutureInstructorClasses(@PathVariable Long id) {
+        List<Classes> futureClasses = classesRepository.findClassesByInstructorId(id).stream()
+                .filter(classes -> classes.getStartTime().isAfter(LocalDateTime.now()))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(futureClasses, HttpStatus.OK);
     }
 }

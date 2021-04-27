@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/mail")
 public class MailController {
 
-    MailService mailService = new MailService();
+    private MailService mailService = new MailService();
 
     @CrossOrigin
     @PostMapping
