@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/instructor")
 public class InstructorController {
@@ -29,6 +28,7 @@ public class InstructorController {
         this.classesRepository = classesRepository;
     }
 
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Person> searchInstructor(@PathVariable long id, HttpServletRequest request) {
         Optional<Instructor> instructor = instructorRepository.findById(id);
@@ -42,28 +42,33 @@ public class InstructorController {
             );
     }
 
+    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<Instructor>> searchAllInstructors(HttpServletRequest request) {
         return new ResponseEntity<>(instructorRepository.findAll(), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("/bulkcreate")
     public ResponseEntity<String> bulkCreate(HttpServletRequest request) {
         instructorRepository.save(new Instructor("Adam", "Nowak", "anowak@student.agh.edu.pl"));
         return new ResponseEntity<>("{\"Status\": \"Instructor has been added to database.\"}", HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Instructor> addInstructor(@RequestBody Instructor newInstructor, HttpServletRequest request) {
         return new ResponseEntity<>(instructorRepository.save(newInstructor), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteInstructor(@PathVariable Long id, HttpServletRequest request) {
         instructorRepository.deleteById(id);
         return new ResponseEntity<>("{\"Status\": \"Instructor with id " + id + " has been deleted.\"}", HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PutMapping("/{id}")
     public ResponseEntity<Instructor> updateInstructor(
             @RequestBody Instructor newInstructor,
@@ -85,6 +90,7 @@ public class InstructorController {
         );
     }
 
+    @CrossOrigin
     @GetMapping("/where")
     public ResponseEntity<List<Instructor>> searchInstructorBy(
             @RequestParam(value = "firstName", required = false) Optional<String> firstName,
@@ -118,6 +124,7 @@ public class InstructorController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/{id}/classes")
     public ResponseEntity<List<Classes>> findClassesConductedByInstructor(@PathVariable Long id) {
         return new ResponseEntity<>(classesRepository.findClassesByInstructorId(id), HttpStatus.OK);

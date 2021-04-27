@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/classes")
 public class ClassesController {
@@ -30,6 +29,7 @@ public class ClassesController {
         this.instructorRepository = instructorRepository;
     }
 
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Classes> searchClasses(@PathVariable Long id, HttpServletRequest request) {
         Optional<Classes> course = repository.findById(id);
@@ -43,17 +43,20 @@ public class ClassesController {
             );
     }
 
+    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<Classes>> allClasses(HttpServletRequest request) {
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Classes> addClasses(@RequestBody Classes newClasses, HttpServletRequest request) {
         return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
 
     }
 
+    @CrossOrigin
     @PostMapping("/submit")
     public ResponseEntity<Classes> addClassesByForm(
             @RequestBody ClassesSubmitForm classesSubmitForm,
@@ -77,6 +80,7 @@ public class ClassesController {
         return new ResponseEntity<>(repository.save(newClasses), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PostMapping("/{id}/addInstructor")
     public ResponseEntity<Classes> addInstructor(
             @RequestBody Instructor instructor,
@@ -96,12 +100,14 @@ public class ClassesController {
         return new ResponseEntity<>(editedClasses, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteClasses(@PathVariable Long id, HttpServletRequest request) {
         repository.deleteById(id);
         return new ResponseEntity<>("{\"Status\": \"Classes with id " + id + " has been deleted.\"}", HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PutMapping("/{id}")
     public Classes updateClasses(@RequestBody Classes newClasses, @PathVariable Long id) {
         return repository.findById(id)
@@ -124,6 +130,7 @@ public class ClassesController {
                 });
     }
 
+    @CrossOrigin
     @GetMapping("/bulkCreate")
     public ResponseEntity<String> bulkCreate(HttpServletRequest request) {
         Instructor instructor = instructorRepository.findById(1L).orElse(null);
@@ -139,6 +146,7 @@ public class ClassesController {
         return new ResponseEntity<>("{\"Status\": \"Classes has been added to database.\"}", HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("/where")
     public ResponseEntity<List<Classes>> searchClassesBy(
             @RequestParam(value = "firstName", required = false) Optional<String> firstName,

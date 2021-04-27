@@ -4,6 +4,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.edu.agh.io.eventsOrganizer.errors.ErrorInfo;
 
@@ -18,6 +19,7 @@ public class CustomErrorController implements ErrorController {
      * @param request
      * @return error
      */
+    @CrossOrigin
     @RequestMapping("/error")
     public ResponseEntity<ErrorInfo> handleError(HttpServletRequest request) {
         return new ResponseEntity<>(

@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/mail")
 public class MailController {
 
     MailService mailService = new MailService();
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Mail> sendMail(@RequestBody Mail mail, HttpServletRequest request) throws UnsupportedEncodingException {
         try {
