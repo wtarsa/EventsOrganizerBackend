@@ -61,4 +61,12 @@ public class Classes {
     private String classroom;
 
     private String event;
+
+    public String getReminderNote() {
+        return "event:" + event  + "\n" +
+                "name:" + name  + "\n" +
+                "start time:" + startTime  + "\n" +
+                "end time:" + endTime  + "\n" +
+                "classroom:" + classroom  + "\n\n";
+    }
 }
