@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -109,7 +110,7 @@ public class ClassesController {
 
     @CrossOrigin
     @PutMapping("/{id}")
-    public Classes updateClasses(@RequestBody Classes newClasses, @PathVariable Long id) {
+    public Classes updateClasses(@RequestBody Classes newClasses, @PathVariable UUID id) {
         return repository.findById(id)
                 .map(classes -> {
                     classes.setAppointmentNumber(newClasses.getAppointmentNumber());
@@ -142,7 +143,7 @@ public class ClassesController {
             );
         }
         repository.save(new Classes(1, "2021-03-30 08.00", "2021-03-30 09.30", "IO",
-                "WSZYSCY", instructor, ClassesType.LECTURE, 2, ClassesForm.REMOTE, "1.38"));
+                "WSZYSCY", instructor, ClassesType.LECTURE, 2, ClassesForm.REMOTE, "1.38", "SFI"));
         return new ResponseEntity<>("{\"Status\": \"Classes has been added to database.\"}", HttpStatus.OK);
     }
 
