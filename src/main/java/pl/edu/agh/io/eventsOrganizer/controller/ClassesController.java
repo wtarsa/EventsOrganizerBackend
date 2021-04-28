@@ -32,7 +32,7 @@ public class ClassesController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<Classes> searchClasses(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Classes> searchClasses(@PathVariable UUID id, HttpServletRequest request) {
         Optional<Classes> course = repository.findById(id);
         if (course.isPresent())
             return new ResponseEntity<>(course.get(), HttpStatus.OK);
@@ -85,7 +85,7 @@ public class ClassesController {
     @PostMapping("/{id}/addInstructor")
     public ResponseEntity<Classes> addInstructor(
             @RequestBody Instructor instructor,
-            @PathVariable Long id,
+            @PathVariable UUID id,
             HttpServletRequest request
     ) {
         Classes editedClasses = repository.findById(id).orElse(null);
@@ -103,7 +103,7 @@ public class ClassesController {
 
     @CrossOrigin
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClasses(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<String> deleteClasses(@PathVariable UUID id, HttpServletRequest request) {
         repository.deleteById(id);
         return new ResponseEntity<>("{\"Status\": \"Classes with id " + id + " has been deleted.\"}", HttpStatus.OK);
     }
