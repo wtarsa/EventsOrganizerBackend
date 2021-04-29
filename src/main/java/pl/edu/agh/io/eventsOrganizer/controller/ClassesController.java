@@ -155,6 +155,7 @@ public class ClassesController {
             @RequestParam(value = "startDate", required = false) Optional<LocalDateTime> startDate,
             @RequestParam(value = "endDate", required = false) Optional<LocalDateTime> endDate,
             @RequestParam(value = "classroom", required = false) Optional<String> classroom,
+            @RequestParam(value = "event", required = false) Optional<String> event,
             HttpServletRequest request
     ) {
         List<Classes> classes = repository.findAll();
@@ -167,7 +168,9 @@ public class ClassesController {
         if (endDate.isPresent())
             classes = classes.stream().filter(a -> a.getEndTime().isBefore(endDate.get())).collect(Collectors.toList());
         if (classroom.isPresent())
-            classes = classes.stream().filter(a -> a.getClassroom()!=null && a.getClassroom().equals(classroom.get())).collect(Collectors.toList());
+            classes = classes.stream().filter(a -> a.getClassroom() != null && a.getClassroom().equals(classroom.get())).collect(Collectors.toList());
+        if (event.isPresent())
+            classes = classes.stream().filter(a -> a.getEvent() != null && a.getEvent().equals(event.get())).collect(Collectors.toList());
 
         return new ResponseEntity<>(classes, HttpStatus.OK);
     }

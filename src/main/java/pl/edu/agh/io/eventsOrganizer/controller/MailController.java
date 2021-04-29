@@ -16,7 +16,9 @@ import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -41,7 +43,8 @@ public class MailController {
     public MailController(InstructorRepository instructorRepository, ClassesRepository classesRepository) {
         this.instructorRepository = instructorRepository;
         this.classesRepository = classesRepository;
-        executorService.scheduleAtFixedRate(this::sendReminders, 0, 1, TimeUnit.DAYS);
+        long sevenPm = LocalDateTime.now().until(LocalDate.now().atTime(19, 0), ChronoUnit.MINUTES);
+        executorService.scheduleAtFixedRate(this::sendReminders, sevenPm, 1, TimeUnit.DAYS);
     }
 
     @CrossOrigin

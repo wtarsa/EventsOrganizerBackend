@@ -5,6 +5,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class MailService {
     final String user = "postmaster@sandbox349dce3";
@@ -33,6 +34,7 @@ public class MailService {
                 InternetAddress.parse(mail.getRecipient())
         );
         message.setText(mail.getContent());
+        Logger.getLogger("").info("Sending email to " + mail.getRecipient() + " subject: " + mail.getSubject());
         Transport.send(message);
     }
 
