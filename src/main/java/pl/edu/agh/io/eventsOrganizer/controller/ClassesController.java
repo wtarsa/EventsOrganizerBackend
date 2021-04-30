@@ -1,5 +1,6 @@
 package pl.edu.agh.io.eventsOrganizer.controller;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -152,8 +153,8 @@ public class ClassesController {
     public ResponseEntity<List<Classes>> searchClassesBy(
             @RequestParam(value = "firstName", required = false) Optional<String> firstName,
             @RequestParam(value = "lastName", required = false) Optional<String> lastName,
-            @RequestParam(value = "startDate", required = false) Optional<LocalDateTime> startDate,
-            @RequestParam(value = "endDate", required = false) Optional<LocalDateTime> endDate,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Optional<LocalDateTime> startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Optional<LocalDateTime> endDate,
             @RequestParam(value = "classroom", required = false) Optional<String> classroom,
             @RequestParam(value = "event", required = false) Optional<String> event,
             HttpServletRequest request
