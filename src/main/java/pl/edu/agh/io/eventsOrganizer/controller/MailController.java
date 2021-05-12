@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/mail")
 public class MailController {
 
-    private MailService mailService = new MailService();
+    private final MailService mailService = new MailService();
 
     private final InstructorRepository instructorRepository;
 

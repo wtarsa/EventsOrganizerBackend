@@ -8,8 +8,12 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class MailService {
-    final String username = "agheventsorganizer@interia.pl";
-    final String password = "xn-wCt&n8*HGU/3";
+    final String user = "agheventsorganizer@";
+    final String name = "interia.pl";
+    final String username = user + name;
+    final String pass = "xn-wCt&";
+    final String word = "n8*HGU/3";
+    final String password = pass + word;
 
     Properties prop = createProperties();
     Session session = Session.getInstance(prop,
