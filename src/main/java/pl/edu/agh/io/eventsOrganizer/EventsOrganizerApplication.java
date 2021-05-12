@@ -9,5 +9,4 @@ public class EventsOrganizerApplication {
     public static void main(String[] args) {
         SpringApplication.run(EventsOrganizerApplication.class, args);
     }
-
 }
