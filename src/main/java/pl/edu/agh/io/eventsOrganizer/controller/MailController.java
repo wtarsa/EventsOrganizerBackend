@@ -16,14 +16,12 @@ import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,15 +34,14 @@ public class MailController {
 
     private final ClassesRepository classesRepository;
 
-    private final static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     private final static Logger logger = LoggerFactory.getLogger(MailController.class);
 
     public MailController(InstructorRepository instructorRepository, ClassesRepository classesRepository) {
         this.instructorRepository = instructorRepository;
         this.classesRepository = classesRepository;
-        long sevenPm = LocalDateTime.now().until(LocalDate.now().atTime(19, 0), ChronoUnit.MINUTES);
-        executorService.scheduleAtFixedRate(this::sendReminders, sevenPm, 1, TimeUnit.DAYS);
+        executorService.execute(this::sendEveryDay);
     }
 
     @CrossOrigin
@@ -80,6 +77,7 @@ public class MailController {
     }
 
     private List<Mail> sendReminders() {
+        logger.info("Sending Email Reminders");
         List<Mail> mailsSent = new ArrayList<>();
         List<Instructor> instructorList = instructorRepository.findAll();
         List<List<Classes>> instructorClasses = instructorList.stream()
@@ -96,10 +94,28 @@ public class MailController {
                 builder.append("You have upcoming events next week:\n");
                 classesList.forEach(classes -> builder.append(classes.getReminderNote()));
                 Mail mail = new Mail(classesList.get(0).getInstructor().getEmail(), "Timetable reminder!", builder.toString());
-                mailSender(mail);
-                mailsSent.add(mail);
+                try {
+                    mailSender(mail);
+                    mailsSent.add(mail);
+                } catch (NullPointerException e) {
+                    logger.error("Email address of instructor " + classesList.get(0).getInstructor().getId() + " is null!" + " " + e.getMessage());
+                }
             }
         });
         return mailsSent;
+    }
+
+    private void sendEveryDay() {
+        Timer timer = new Timer();
+        timer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        sendReminders();
+                    }
+                },
+                Date.from(Instant.now()),
+                Duration.ofDays(1).toMillis()
+        );
     }
 }

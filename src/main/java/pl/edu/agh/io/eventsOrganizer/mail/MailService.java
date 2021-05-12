@@ -8,13 +8,8 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class MailService {
-    final String user = "postmaster@sandbox349dce3";
-    final String name = "e7ab14b6ab5bb5e79385e83ea.mailgun.org";
-    final String username = user + name;
-
-    final String pass = "16bc7710124d6e3df5a6";
-    final String word = "61b6ca10a024-71b35d7e-f9882ae5";
-    final String password = pass + word;
+    final String username = "agheventsorganizer@interia.pl";
+    final String password = "xn-wCt&n8*HGU/3";
 
     Properties prop = createProperties();
     Session session = Session.getInstance(prop,
@@ -40,7 +35,7 @@ public class MailService {
 
     Properties createProperties() {
         Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.mailgun.org");
+        prop.put("mail.smtp.host", "poczta.interia.pl");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
         prop.put("mail.smtp.starttls.enable", "true"); //TLS
