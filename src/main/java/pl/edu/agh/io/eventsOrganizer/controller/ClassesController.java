@@ -175,4 +175,14 @@ public class ClassesController {
 
         return new ResponseEntity<>(classes, HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping("/events/all")
+    public ResponseEntity<List<String>> getAllEvents(HttpServletRequest request) {
+        return new ResponseEntity<>(repository.findAll().stream()
+                .map(c -> c.getEvent())
+                .distinct()
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
+    }
 }
