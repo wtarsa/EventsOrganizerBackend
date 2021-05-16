@@ -3,7 +3,6 @@ package pl.edu.agh.io.eventsOrganizer.excel;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
 import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 
@@ -12,12 +11,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 public class ExcelExport {
-    public static File exportToExcel(List<Classes> classesList, Optional<Instructor> instructor) throws IOException {
-        if (instructor.isEmpty())
-            throw new NotFoundException("", "", List.of());
+    public static File exportToExcel(List<Classes> classesList, Instructor instructor) throws IOException {
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Classes");
         for (int i = 0; i < 10; i++)
@@ -47,8 +44,8 @@ public class ExcelExport {
         headerCell.setCellStyle(headerStyle);
 
         Row a = sheet.createRow(1);
-        a.createCell(0).setCellValue(instructor.get().getFirstName());
-        a.createCell(1).setCellValue(instructor.get().getLastName());
+        a.createCell(0).setCellValue(instructor.getFirstName());
+        a.createCell(1).setCellValue(instructor.getLastName());
 
         Row b = sheet.createRow(3);
         headerCell = b.createCell(0);
@@ -138,7 +135,7 @@ public class ExcelExport {
 
         File currDir = new File(".");
         String path = currDir.getAbsolutePath();
-        String fileLocation = path.substring(0, path.length() - 1) + instructor.get().getFirstName() + "_" + instructor.get().getLastName() + ".xlsx";
+        String fileLocation = path.substring(0, path.length() - 1) + instructor.getFirstName() + "_" + instructor.getLastName() + ".xlsx";
 
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         workbook.write(outputStream);

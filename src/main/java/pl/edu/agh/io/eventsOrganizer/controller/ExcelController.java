@@ -7,8 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.agh.io.eventsOrganizer.errors.NotFoundException;
 import pl.edu.agh.io.eventsOrganizer.excel.ExcelExport;
 import pl.edu.agh.io.eventsOrganizer.model.Classes;
+import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import pl.edu.agh.io.eventsOrganizer.repository.ClassesRepository;
 import pl.edu.agh.io.eventsOrganizer.repository.InstructorRepository;
 
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/excel")
@@ -39,7 +42,16 @@ public class ExcelController {
         logger.info("Received request to download excel for instructor " + instructorId);
         ResponseEntity<byte[]> respEntity;
         List<Classes> classesList = classesRepository.findClassesByInstructorId(instructorId);
-        File file = ExcelExport.exportToExcel(classesList, instructorRepository.findById(instructorId));
+        Optional<Instructor> instructor = instructorRepository.findById(instructorId);
+
+        if (instructor.isEmpty())
+            throw new NotFoundException(
+                    "Instructor with provided id not found",
+                    request.getRequestURI(),
+                    List.of("Instructor " + instructorId + " not found")
+            );
+
+        File file = ExcelExport.exportToExcel(classesList, instructor.get());
         String fileName = file.getName();
 
         InputStream inputStream = new FileInputStream(file);
