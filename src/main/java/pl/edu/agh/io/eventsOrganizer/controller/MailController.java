@@ -41,7 +41,7 @@ public class MailController {
     public MailController(InstructorRepository instructorRepository, ClassesRepository classesRepository) {
         this.instructorRepository = instructorRepository;
         this.classesRepository = classesRepository;
-        executorService.execute(this::sendEveryDay);
+//        executorService.execute(this::sendEveryDay);
     }
 
     @CrossOrigin
