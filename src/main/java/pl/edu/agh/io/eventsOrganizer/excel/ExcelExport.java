@@ -10,13 +10,12 @@ import pl.edu.agh.io.eventsOrganizer.model.Instructor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
 public class ExcelExport {
-    public static Workbook exportToExcel(List<Classes> classesList, Optional<Instructor> instructor) throws IOException, ParseException {
+    public static File exportToExcel(List<Classes> classesList, Optional<Instructor> instructor) throws IOException {
         if (instructor.isEmpty())
             throw new NotFoundException("", "", List.of());
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -98,7 +97,7 @@ public class ExcelExport {
             Classes classes = classesList.get(i);
             CellStyle dateStyle = workbook.createCellStyle();
             CreationHelper createHelper = workbook.getCreationHelper();
-            dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy-MM-dd HH.mm"));
+            dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd.MM.yyyy HH:mm"));
 
             Calendar startTime = Calendar.getInstance();
             startTime.set(
@@ -144,8 +143,6 @@ public class ExcelExport {
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         workbook.write(outputStream);
         workbook.close();
-
-        return workbook;
+        return new File(fileLocation);
     }
-
 }
