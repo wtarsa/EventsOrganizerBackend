@@ -12,7 +12,7 @@ public class MailService {
     final String name = "interia.pl";
     final String username = user + name;
     final String pass = "xn-wCt&";
-    final String word = "n8*HGU/3";
+    final String word = "n8*HGU/31";
     final String password = pass + word;
 
     Properties prop = createProperties();
