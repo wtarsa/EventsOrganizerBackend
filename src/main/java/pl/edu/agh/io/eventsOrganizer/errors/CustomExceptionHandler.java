@@ -45,4 +45,17 @@ class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SqlException.class)
+    public final ResponseEntity<Object> handleSqlException(SqlException ex) {
+        logger.error(ex.getLocalizedMessage());
+        ErrorMessage errorMessage = new ErrorMessage(
+                ex.getLocalizedMessage(),
+                ex.getDetails(),
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                ex.getPath()
+        );
+        return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
 }

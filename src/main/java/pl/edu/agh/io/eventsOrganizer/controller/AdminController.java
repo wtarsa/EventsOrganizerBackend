@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.edu.agh.io.eventsOrganizer.errors.SqlException;
 import pl.edu.agh.io.eventsOrganizer.model.User;
 import pl.edu.agh.io.eventsOrganizer.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -37,8 +39,16 @@ public class AdminController {
     }
 
     @PostMapping("/admin/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user, HttpServletRequest request) {
-        User newUser = new User(user.getUsername(), user.getPassword(), user.getAdmin());
-        return new ResponseEntity<>(userRepository.save(newUser), HttpStatus.OK);
+    public ResponseEntity<User> addUser(@RequestBody User user, HttpServletRequest request) throws SqlException {
+        try {
+            User newUser = new User(user.getUsername(), user.getPassword(), user.getAdmin());
+            return new ResponseEntity<>(userRepository.save(newUser), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new SqlException(
+                    "Error during adding new user",
+                    request.getRequestURI(),
+                    List.of("User already exist")
+            );
+        }
     }
 }
