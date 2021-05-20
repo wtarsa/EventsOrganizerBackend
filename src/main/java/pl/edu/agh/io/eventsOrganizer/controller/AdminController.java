@@ -35,7 +35,13 @@ public class AdminController {
         } else if (!foundUser.getPassword().equals(user.getPassword())) {
             logger.error("Incorrect password");
         }
-        return new ResponseEntity<>(foundUser != null && foundUser.getAdmin() != null && foundUser.getAdmin(), HttpStatus.OK);
+        return new ResponseEntity<>(
+                foundUser != null
+                        && foundUser.getAdmin() != null
+                        && foundUser.getAdmin()
+                        && foundUser.getPassword() != null
+                        && foundUser.getPassword().equals(user.getPassword()),
+                HttpStatus.OK);
     }
 
     @PostMapping("/admin/addUser")
