@@ -116,6 +116,7 @@ public class ClassesController {
                 .findInstructorByFirstNameAndLastName(newClasses.getFirstName(), newClasses.getLastName());
         Instructor instructor = instructorList.size() == 0 ? new Instructor(newClasses.getFirstName(),
                 newClasses.getLastName(), "") : instructorList.get(0);
+        instructorRepository.save(instructor);
 
         return repository.findById(id)
                 .map(classes -> {
