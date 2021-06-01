@@ -2,6 +2,7 @@ package pl.edu.agh.io.eventsOrganizer.model;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import pl.edu.agh.io.eventsOrganizer.forms.ClassesSubmitForm;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ public class Classes {
     public Classes() {
     }
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm");
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm");
 
     public Classes(int appointmentNumber, String startTime, String endTime, String name, String studentsGroup,
                    Instructor instructor, ClassesType classesType, int numberOfHours, ClassesForm classesForm, String classroom, String event) {
@@ -68,5 +69,11 @@ public class Classes {
                 "start time:" + startTime + "\n" +
                 "end time:" + endTime + "\n" +
                 "classroom:" + classroom + "\n\n";
+    }
+
+    public ClassesSubmitForm toClassesSubmitForm() {
+        return new ClassesSubmitForm(appointmentNumber, startTime.format(formatter), endTime.format(formatter),
+                name, studentsGroup, instructor.getFirstName(), instructor.getLastName(), classesType, numberOfHours,
+                classesForm, classroom, event);
     }
 }

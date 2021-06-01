@@ -98,7 +98,7 @@ public class ClassesController {
             );
         }
         editedClasses.setInstructor(instructor);
-        updateClasses(editedClasses, editedClasses.getId());
+        updateClasses(editedClasses.toClassesSubmitForm(), editedClasses.getId());
         return new ResponseEntity<>(editedClasses, HttpStatus.OK);
     }
 
@@ -111,15 +111,21 @@ public class ClassesController {
 
     @CrossOrigin
     @PutMapping("/{id}")
-    public Classes updateClasses(@RequestBody Classes newClasses, @PathVariable UUID id) {
+    public Classes updateClasses(@RequestBody ClassesSubmitForm newClasses, @PathVariable UUID id) {
+        List<Instructor> instructorList = instructorRepository
+                .findInstructorByFirstNameAndLastName(newClasses.getFirstName(), newClasses.getLastName());
+        Instructor instructor = instructorList.size() == 0 ? new Instructor(newClasses.getFirstName(),
+                newClasses.getLastName(), "") : instructorList.get(0);
+        instructorRepository.save(instructor);
+
         return repository.findById(id)
                 .map(classes -> {
                     classes.setAppointmentNumber(newClasses.getAppointmentNumber());
-                    classes.setStartTime(newClasses.getStartTime());
-                    classes.setEndTime(newClasses.getEndTime());
+                    classes.setStartTime(LocalDateTime.parse(newClasses.getStartTime(), Classes.formatter));
+                    classes.setEndTime(LocalDateTime.parse(newClasses.getEndTime(), Classes.formatter));
                     classes.setName(newClasses.getName());
                     classes.setStudentsGroup(newClasses.getStudentsGroup());
-                    classes.setInstructor(newClasses.getInstructor());
+                    classes.setInstructor(instructor);
                     classes.setClassesType(newClasses.getClassesType());
                     classes.setNumberOfHours(newClasses.getNumberOfHours());
                     classes.setClassesForm(newClasses.getClassesForm());
@@ -127,8 +133,11 @@ public class ClassesController {
                     return repository.save(classes);
                 })
                 .orElseGet(() -> {
-                    newClasses.setId(id);
-                    return repository.save(newClasses);
+                    Classes classes = new Classes(newClasses.getAppointmentNumber(), newClasses.getStartTime(), newClasses.getEndTime(),
+                            newClasses.getName(), newClasses.getStudentsGroup(), instructor, newClasses.getClassesType(),
+                            newClasses.getNumberOfHours(), newClasses.getClassesForm(), newClasses.getClassroom(), newClasses.getEvent());
+                    classes.setId(id);
+                    return repository.save(classes);
                 });
     }
 
