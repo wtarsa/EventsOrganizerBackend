@@ -45,8 +45,30 @@ public class Generator {
 
     public List<String> generateEvents(int count) {
         List<String> events = new ArrayList<>();
+        List<String> eventList = List.of(
+                "Computer Science",
+                "Computer Engineering",
+                "Information Systems",
+                "New Media",
+                "Information Technology (IT)",
+                "Information Science",
+                "Web technology",
+                "Internetworking",
+                "Computer science",
+                "Computer information systems",
+                "PC hardware",
+                "Web page design and development",
+                "Programming",
+                "Computer studies education",
+                "Theory of computation",
+                "Information and coding theory",
+                "Data structures and algorithms",
+                "Programming language theory and formal methods",
+                "Electronics",
+                "Electronics and Telecommunications"
+        );
         for (int i = 0; i < count; i++) {
-            events.add(faker.company().industry());
+            events.add(eventList.get(random.nextInt(eventList.size())));
         }
         return events;
     }
@@ -80,7 +102,7 @@ public class Generator {
     }
 
     private String getClassroom() {
-        List<String> classrooms = List.of("1.38", "2.41", "1.22", "3.33", "4.22", "4.12", "3.21", "3.32", "2.15");
+        List<String> classrooms = List.of("1.38", "2.41", "1.22", "3.33", "4.22", "4.12", "3.21", "3.32", "2.15", "1.12", "2.32", "3.22", "3.34", "4.12", "4.22");
         return classrooms.get(random.nextInt(classrooms.size()));
     }
 
@@ -95,21 +117,40 @@ public class Generator {
                 "Algebra",
                 "Geometry",
                 "Science",
-                "Geography",
-                "History",
-                "English",
-                "Spanish",
-                "German",
-                "French",
-                "Latin",
-                "Greek",
-                "Arabic",
+                "Introduction to UNIX System",
+                "Introduction to Computer Science",
+                "Interpersonal Skills",
+                "Mathematical Analysis 1",
+                "Discrete Mathematics",
+                "Data Structures and Algorithms",
+                "Imperative Programming",
+                "Mathematical Analysis 2",
+                "Protection of Intellectual Property",
                 "Computer Science",
-                "Art",
-                "Economics",
-                "Music",
-                "Drama",
-                "Physical Education"
+                "Physics 1",
+                "Mathematical Logic",
+                "Object Oriented Programming",
+                "Introduction to Databases",
+                "Functional programming",
+                "Physics 2",
+                "Differential and Difference Equations",
+                "Computation Methods for Science and Technology",
+                "Operating Systems",
+                "Automata and Formal Languages Theory",
+                "Digital technology",
+                "Microprocessor Techniques",
+                "Computer Networks",
+                "Theory of Concurrency",
+                "Computation and Complexity Theory",
+                "Cryptography",
+                "Object-oriented design",
+                "Database Systems",
+                "Computer Architecture",
+                "Distributed Systems",
+                "Embedded Systems",
+                "Complex Digital Systems",
+                "Introduction to ERP systems",
+                "Software Engineering"
         );
         return subjects.get(random.nextInt(subjects.size()));
 
